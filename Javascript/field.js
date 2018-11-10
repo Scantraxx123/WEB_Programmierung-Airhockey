@@ -146,15 +146,33 @@ function drawMatchfield() {
 }
 
 
-
 function setCoords(event) {
 
     var rect = canvas.getBoundingClientRect();
-    var temp = event.clientY - rect.top;
-    if (temp > 0 && temp < canvas.height) {
-        player.y = event.clientY - rect.top;
-    }
-    if (event.clientX - rect.left > 0 && event.clientX - rect.left < canvas.width / 2) {
-        player.x = event.clientX - rect.left;
-    }
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    //left and right
+    if (y < player.r && x + player.r > canvas.width / 2) {
+        player.x = canvas.width / 2 - player.r;
+        player.y = player.r;
+    } else if (x < player.r) {
+        player.x = player.r;
+    } else if (x + player.r > canvas.width / 2) {
+        player.x = canvas.width / 2 - player.r;
+    } else player.x = x;
+
+    //top and down
+    if (x < player.r && y + player.r > canvas.height) {
+        player.x = player.r;
+        player.y = canvas.height - player.r;
+    } else if (y < player.r) {
+        player.y = player.r;
+    } else if (y + player.r > canvas.height) {
+        player.y = canvas.height - player.r;
+    } else player.y = y;
+
+
+
+
+
 }
