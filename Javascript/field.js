@@ -6,6 +6,9 @@
 var context = null;
 var canvas = null;
 
+var xspeed = 0;
+var yspeed = 0;
+
 
 var player = {
     x: 0,
@@ -51,28 +54,27 @@ function update() {
 
     drawPuk();
     drawPlayer();
-    if (PlayerPukColliding()) {
-        puk.speed = 150;
-        movePukRight(puk.speed);
-        puk.speed--;
-    } else if (puk.speed > 0) {
-        movePukRight(puk.speed);
-        puk.speed--;
-    }
     if (pukCanvasColliding()) {
         puk.speed = 0;
     }
+    if (PlayerPukColliding()) {
+        puk.speed = 2;
 
-
+        var dx = puk.x - player.x;
+        var dy = puk.y - player.y;
+        dx /= 30;
+        dy /= 30;
+        xspeed = dx * puk.speed;
+        yspeed = dy * puk.speed;
+    }
+    movePuk();
 }
 
 
-
 function PlayerPukColliding() {
-    var dx = player.x - puk.x;
-    var dy = player.y - puk.y;
+    var dx = puk.x - player.x;
+    var dy = puk.y - player.y;
     var radiusSum = player.r + puk.r;
-
 
     return dx * dx + dy * dy <= radiusSum * radiusSum;
 }
@@ -83,18 +85,14 @@ function pukCanvasColliding() {
 
 }
 
-function movePukRight(velo) {
-    if (velo >= 120) {
-        puk.x += 10;
-    } else if (velo >= 90) {
-        puk.x += 8;
-    } else if (velo >= 60) {
-        puk.x += 6;
-    } else if (velo >= 30) {
-        puk.x += 4;
-    } else {
-        puk.x += 3;
-    }
+function movePuk() {
+
+    puk.x += xspeed;
+    puk.y += yspeed;
+
+    xspeed *= 0.99;
+    yspeed *= 0.99;
+
 
 
 }
