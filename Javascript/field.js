@@ -9,6 +9,9 @@ var canvas = null;
 var xspeed = 0;
 var yspeed = 0;
 
+var playerGoals = 0;
+var computerGoals = 0;
+
 
 var player = {
     x: 0,
@@ -17,10 +20,23 @@ var player = {
 };
 
 var puk = {
-    x: 320,
-    y: 240,
+    x: 0,
+    y: 0,
     r: 15,
     speed: 0
+};
+
+var goal1 = {
+    x: 0,
+    y1: 160,
+    y2: 320
+
+};
+
+var goal2 = {
+    x: 0,
+    y1: 160,
+    y2: 320
 };
 
 
@@ -34,17 +50,26 @@ window.addEventListener('mousemove', function (e) {
 });
 
 function init() {
-
     canvas = document.getElementById('canvas');
     context = canvas.getContext("2d");
 
     canvas.width = 640;
     canvas.height = 480;
 
+    puk.x = canvas.width / 2;
+    puk.y = canvas.height / 2;
 
+    goal2.x = canvas.width;
 }
 
+function reset() {
+    puk.x = canvas.width / 2;
+    puk.y = canvas.height / 2;
+    puk.speed = 0;
+    xspeed = 0;
+    yspeed = 0;
 
+}
 
 function update() {
 
@@ -54,11 +79,24 @@ function update() {
 
     drawPuk();
     drawPlayer();
+    if (goalOneCollision()) {
+        reset();
+        computerGoals++;
+
+    }
+    if (goalTwoCollision()) {
+        reset();
+        playerGoals++;
+
+    }
+
     if (pukCanvasColliding()) {
         puk.speed = 0;
     }
+
+
     if (PlayerPukColliding()) {
-        puk.speed = 2;
+        puk.speed = 10;
 
         var dx = puk.x - player.x;
         var dy = puk.y - player.y;
@@ -69,6 +107,16 @@ function update() {
     }
     movePuk();
 }
+
+function goalOneCollision() {
+    return puk.x < goal1.x && puk.y > goal1.y1 && puk.y < goal1.y2
+}
+
+function goalTwoCollision() {
+    return puk.x > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
+}
+
+
 
 
 function PlayerPukColliding() {
