@@ -3,8 +3,11 @@
 /* global window */
 "use strict";
 
-var context = null;
-var canvas = null;
+var fieldContext = null;
+var fieldCanvas = null;
+
+var scoreCanvas = null;
+var scoreContext = null;
 
 var xspeed = 0;
 var yspeed = 0;
@@ -50,21 +53,30 @@ window.addEventListener('mousemove', function (e) {
 });
 
 function init() {
-    canvas = document.getElementById('canvas');
-    context = canvas.getContext("2d");
+    fieldCanvas = document.getElementById('field');
+    fieldContext = fieldCanvas.getContext("2d");
 
-    canvas.width = 640;
-    canvas.height = 480;
 
-    puk.x = canvas.width / 2;
-    puk.y = canvas.height / 2;
+    fieldCanvas.width = 640;
+    fieldCanvas.height = 480;
 
-    goal2.x = canvas.width;
+    puk.x = fieldCanvas.width / 2;
+    puk.y = fieldCanvas.height / 2;
+
+    goal2.x = fieldCanvas.width;
+
+
+
+    scoreCanvas = document.getElementById('score');
+    scoreContext = scoreCanvas.getContext("2d");
+
+    scoreCanvas.width = fieldCanvas.width;
+
 }
 
 function reset() {
-    puk.x = canvas.width / 2;
-    puk.y = canvas.height / 2;
+    puk.x = fieldCanvas.width / 2;
+    puk.y = fieldCanvas.height / 2;
     puk.speed = 0;
     xspeed = 0;
     yspeed = 0;
@@ -74,7 +86,8 @@ function reset() {
 function update() {
 
     requestAnimationFrame(update);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    fieldContext.clearRect(0, 0, fieldCanvas.width, fieldCanvas.height);
+    scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     drawMatchfield();
 
     drawPuk();
@@ -146,75 +159,86 @@ function movePuk() {
 }
 
 function drawPlayer() {
-    context.save();
-    context.beginPath();
-    context.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
-    context.fillStyle = "#FF0000";
-    context.stroke();
-    context.fill();
+    fieldContext.save();
+    fieldContext.beginPath();
+    fieldContext.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
+    fieldContext.fillStyle = "#FF0000";
+    fieldContext.stroke();
+    fieldContext.fill();
 }
 
 function drawPuk() {
-    context.save();
-    context.beginPath();
-    context.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
-    context.fillStyle = "#000000";
-    context.fill();
+    fieldContext.save();
+    fieldContext.beginPath();
+    fieldContext.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
+    fieldContext.fillStyle = "#000000";
+    fieldContext.fill();
 }
 
 
 
 function drawMatchfield() {
 
-    context.beginPath();
-    context.moveTo(canvas.width / 2, 0);
-    context.lineTo(canvas.width / 2, canvas.height);
-    context.strokeStyle = "#FF0000";
-    context.stroke();
 
-    context.beginPath();
-    context.arc(canvas.width / 2, canvas.height / 2, 10, 0, 2 * Math.PI);
-    context.fillStyle = '#FF0000';
-    context.fill();
 
-    context.beginPath();
-    context.arc(0, canvas.height / 2, 80, 1.5 * Math.PI, 0.5 * Math.PI);
-    context.strokeStyle = "#0000FF";
-    context.stroke();
+    fieldContext.beginPath();
+    fieldContext.moveTo(fieldCanvas.width / 2, 0);
+    fieldContext.lineTo(fieldCanvas.width / 2, fieldCanvas.height);
+    fieldContext.strokeStyle = "#FF0000";
+    fieldContext.stroke();
 
-    context.beginPath();
-    context.arc(canvas.width, canvas.height / 2, 80, 0.5 * Math.PI, 1.5 * Math.PI);
-    context.stroke();
+    fieldContext.beginPath();
+    fieldContext.arc(fieldCanvas.width / 2, fieldCanvas.height / 2, 10, 0, 2 * Math.PI);
+    fieldContext.fillStyle = '#FF0000';
+    fieldContext.fill();
 
-    context.beginPath();
-    context.arc(canvas.width / 2, canvas.height / 2, 80, 0, 2 * Math.PI);
-    context.stroke();
+    fieldContext.beginPath();
+    fieldContext.arc(0, fieldCanvas.height / 2, 80, 1.5 * Math.PI, 0.5 * Math.PI);
+    fieldContext.strokeStyle = "#0000FF";
+    fieldContext.stroke();
+
+    fieldContext.beginPath();
+    fieldContext.arc(fieldCanvas.width, fieldCanvas.height / 2, 80, 0.5 * Math.PI, 1.5 * Math.PI);
+    fieldContext.stroke();
+
+    fieldContext.beginPath();
+    fieldContext.arc(fieldCanvas.width / 2, fieldCanvas.height / 2, 80, 0, 2 * Math.PI);
+    fieldContext.stroke();
+
+
+
+    scoreContext.font = '60pt Timew New Roman';
+    scoreContext.strokeStyle = 'white';
+    scoreContext.strokeText(playerGoals, fieldCanvas.width / 2 - 90, 100);
+    scoreContext.strokeText(":", fieldCanvas.width / 2 - 10, 100);
+    scoreContext.strokeText(computerGoals, fieldCanvas.width / 2 + 40, 100);
+
 }
 
 
 function setCoords(event) {
 
-    var rect = canvas.getBoundingClientRect();
+    var rect = fieldCanvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     //left and right
-    if (y < player.r && x + player.r > canvas.width / 2) {
-        player.x = canvas.width / 2 - player.r;
+    if (y < player.r && x + player.r > fieldCanvas.width / 2) {
+        player.x = fieldCanvas.width / 2 - player.r;
         player.y = player.r;
     } else if (x < player.r) {
         player.x = player.r;
-    } else if (x + player.r > canvas.width / 2) {
-        player.x = canvas.width / 2 - player.r;
+    } else if (x + player.r > fieldCanvas.width / 2) {
+        player.x = fieldCanvas.width / 2 - player.r;
     } else player.x = x;
 
     //top and down
-    if (x < player.r && y + player.r > canvas.height) {
+    if (x < player.r && y + player.r > fieldCanvas.height) {
         player.x = player.r;
-        player.y = canvas.height - player.r;
+        player.y = fieldCanvas.height - player.r;
     } else if (y < player.r) {
         player.y = player.r;
-    } else if (y + player.r > canvas.height) {
-        player.y = canvas.height - player.r;
+    } else if (y + player.r > fieldCanvas.height) {
+        player.y = fieldCanvas.height - player.r;
     } else player.y = y;
 
 
