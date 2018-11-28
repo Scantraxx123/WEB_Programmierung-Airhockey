@@ -92,24 +92,12 @@ function update() {
 
     drawPuk();
     drawPlayer();
-    if (goalOneCollision()) {
-        reset();
-        computerGoals++;
 
-    }
-    if (goalTwoCollision()) {
-        reset();
-        playerGoals++;
-
-    }
-
-    if (pukCanvasColliding()) {
-        puk.speed = 0;
-    }
+    checkFieldColliding();
 
 
     if (PlayerPukColliding()) {
-        puk.speed = 10;
+        puk.speed = 20;
 
         var dx = puk.x - player.x;
         var dy = puk.y - player.y;
@@ -121,12 +109,56 @@ function update() {
     movePuk();
 }
 
+function checkGoal() {
+
+    if (goalOneCollision()) {
+        reset();
+        computerGoals++;
+        return true;
+    }
+    if (goalTwoCollision()) {
+        reset();
+        playerGoals++;
+        return true;
+    }
+
+}
+
+function checkFieldColliding() {
+    if (puk.x + puk.r > fieldCanvas.width || puk.x < puk.r) {
+
+        if (checkGoal())
+            return;
+
+        if (puk.x > fieldCanvas.width - puk.r) {
+            puk.x = fieldCanvas.width - puk.r;
+        } else {
+            puk.x = puk.r;
+        }
+
+        xspeed = -xspeed;
+    }
+
+    if (puk.y + puk.r > fieldCanvas.height || puk.y < puk.r) {
+
+        if (checkGoal())
+            return;
+
+        if (puk.y > fieldCanvas.height - puk.r) {
+            puk.y = fieldCanvas.height - puk.r;
+        } else {
+            puk.y = puk.r;
+        }
+        yspeed = -yspeed;
+    }
+}
+
 function goalOneCollision() {
-    return puk.x < goal1.x && puk.y > goal1.y1 && puk.y < goal1.y2
+    return puk.x - puk.r < goal1.x && puk.y > goal1.y1 && puk.y < goal1.y2
 }
 
 function goalTwoCollision() {
-    return puk.x > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
+    return puk.x + puk.r > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
 }
 
 
@@ -138,12 +170,6 @@ function PlayerPukColliding() {
     var radiusSum = player.r + puk.r;
 
     return dx * dx + dy * dy <= radiusSum * radiusSum;
-}
-
-
-function pukCanvasColliding() {
-    return 640 <= puk.x;
-
 }
 
 function movePuk() {
