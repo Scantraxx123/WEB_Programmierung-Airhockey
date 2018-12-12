@@ -16,6 +16,12 @@ var playerGoals = 0;
 var computerGoals = 0;
 
 
+var seconds = 0;
+var tens = 0;
+var appendTens = "";
+var appendSeconds = "";
+var interval = null;
+
 var player = {
     x: 0,
     y: 0,
@@ -44,6 +50,7 @@ var goal2 = {
 
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
     update();
 });
@@ -52,7 +59,15 @@ window.addEventListener('mousemove', function (e) {
 
 });
 
+
+
+
+
+
+
+
 function init() {
+
     fieldCanvas = document.getElementById('field');
     fieldContext = fieldCanvas.getContext("2d");
 
@@ -72,6 +87,7 @@ function init() {
 
     scoreCanvas.width = fieldCanvas.width;
 
+    interval = setInterval(timer, 10);
 }
 
 function reset() {
@@ -83,7 +99,14 @@ function reset() {
 
 }
 
+
 function update() {
+    if (playerGoals == 10 || computerGoals == 10) {
+        modal.style.display = "block";
+    }
+
+
+
 
     requestAnimationFrame(update);
     fieldContext.clearRect(0, 0, fieldCanvas.width, fieldCanvas.height);
@@ -94,7 +117,6 @@ function update() {
     drawPlayer();
 
     checkFieldColliding();
-
 
     if (PlayerPukColliding()) {
         puk.speed = 20;
@@ -234,12 +256,19 @@ function drawMatchfield() {
 
 
     scoreContext.font = '60pt Timew New Roman';
-    scoreContext.strokeStyle = 'white';
-    scoreContext.strokeText(playerGoals, fieldCanvas.width / 2 - 90, 100);
-    scoreContext.strokeText(":", fieldCanvas.width / 2 - 10, 100);
-    scoreContext.strokeText(computerGoals, fieldCanvas.width / 2 + 40, 100);
+    scoreContext.fillStyle = 'white';
+    scoreContext.fillText(playerGoals, fieldCanvas.width / 2 - 90, 120, 50);
+    scoreContext.fillText(":", fieldCanvas.width / 2 - 10, 120);
+    scoreContext.fillText(computerGoals, fieldCanvas.width / 2 + 40, 120);
+
+    scoreContext.font = '40pt Timew New Roman';
+    scoreContext.fillText(appendSeconds + ":" + appendTens, fieldCanvas.width / 2 - 100, 50);
+
+
 
 }
+
+
 
 
 function setCoords(event) {
@@ -267,8 +296,29 @@ function setCoords(event) {
         player.y = fieldCanvas.height - player.r;
     } else player.y = y;
 
+}
 
+function timer() {
+    tens++;
 
+    if (tens < 9) {
+        appendTens = "0" + tens;
+    }
 
+    if (tens > 9) {
+        appendTens = tens;
+
+    }
+
+    if (tens > 99) {
+        seconds++;
+        appendSeconds = "0" + seconds;
+        tens = 0;
+        appendTens = "0" + 0;
+    }
+
+    if (seconds > 9) {
+        appendSeconds = seconds;
+    }
 
 }
