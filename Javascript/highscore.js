@@ -13,7 +13,7 @@ function highScoreEntry(name, time) {
 
 function init_highScoreElements() {
 
-    let user = new highScoreEntry("John", 5);
+    let user = new highScoreEntry("John", 1);
     let user1 = new highScoreEntry("Mat", 4);
     let user2 = new highScoreEntry("Schmidthelm", 3);
 
@@ -22,7 +22,7 @@ function init_highScoreElements() {
 }
 
 function myFunction() {
-    //var highScoreEntries = init_users();
+    var highScoreEntries = init_highScoreElements();
     highScoreEntries = localStorage.setItem('highScoreEntries', JSON.stringify(highScoreEntries));
     displayScore();
 

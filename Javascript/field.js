@@ -15,13 +15,6 @@ var yspeed = 0;
 var playerGoals = 0;
 var computerGoals = 0;
 
-
-var seconds = 0;
-var tens = 0;
-var appendTens = "";
-var appendSeconds = "";
-var interval = null;
-
 var player = {
     x: 0,
     y: 0,
@@ -48,29 +41,23 @@ var goal2 = {
     y2: 320
 };
 
+var modal = null;
+var modal_close = null;
+var modal_text = "";
 
+var pause = false;
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    update();
-});
-window.addEventListener('mousemove', function (e) {
-    setCoords(e);
-
-});
-
-
-
-
-
-
+var seconds = 0;
+var tens = 0;
+var appendTens = "";
+var appendSeconds = "";
+var interval = null;
 
 
 function init() {
 
     fieldCanvas = document.getElementById('field');
     fieldContext = fieldCanvas.getContext("2d");
-
 
     fieldCanvas.width = 640;
     fieldCanvas.height = 480;
@@ -79,8 +66,6 @@ function init() {
     puk.y = fieldCanvas.height / 2;
 
     goal2.x = fieldCanvas.width;
-
-
 
     scoreCanvas = document.getElementById('score');
     scoreContext = scoreCanvas.getContext("2d");
@@ -101,34 +86,59 @@ function reset() {
 
 
 function update() {
-    if (playerGoals == 10 || computerGoals == 10) {
+    if (playerGoals == 10) {
+        var input = document.createElement("INPUT");
+        var para = document.createElement("P");
+        var time = document.createTextNode("Deine Zeit: " + appendSeconds + ":" + appendTens);
+        var name = document.createTextNode("Dein Name: ");
+        var mybr = document.createElement('br');
+        var btn = document.createElement("BUTTON");
+        var t = document.createTextNode("CLICK ME");
+        btn.appendChild(t);
+
+        input.setAttribute("type", "text");
+
+        modal_text.innerHTML = "Glückwunsch! Du hast gewonnen!";
+        modal_text.appendChild(mybr);
+        para.appendChild(time);
+        modal_text.appendChild(para);
+        modal_text.appendChild(mybr);
+        modal_text.appendChild(name);
+        modal_text.appendChild(input);
+        modal_text.appendChild(btn);
+
+
         modal.style.display = "block";
+
+        pause = true;
+        clearInterval(interval);
+        scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+        drawMatchfield();
     }
+    if (!pause) {
+
+        requestAnimationFrame(update);
+        fieldContext.clearRect(0, 0, fieldCanvas.width, fieldCanvas.height);
+        scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+        drawMatchfield();
+        drawPuk();
+        drawPlayer();
 
 
+        checkFieldColliding();
 
+        if (PlayerPukColliding()) {
+            puk.speed = 20;
 
-    requestAnimationFrame(update);
-    fieldContext.clearRect(0, 0, fieldCanvas.width, fieldCanvas.height);
-    scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    drawMatchfield();
-
-    drawPuk();
-    drawPlayer();
-
-    checkFieldColliding();
-
-    if (PlayerPukColliding()) {
-        puk.speed = 20;
-
-        var dx = puk.x - player.x;
-        var dy = puk.y - player.y;
-        dx /= 30;
-        dy /= 30;
-        xspeed = dx * puk.speed;
-        yspeed = dy * puk.speed;
+            var dx = puk.x - player.x;
+            var dy = puk.y - player.y;
+            dx /= 30;
+            dy /= 30;
+            xspeed = dx * puk.speed;
+            yspeed = dy * puk.speed;
+        }
+        movePuk();
     }
-    movePuk();
 }
 
 function checkGoal() {
@@ -182,8 +192,6 @@ function goalOneCollision() {
 function goalTwoCollision() {
     return puk.x + puk.r > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
 }
-
-
 
 
 function PlayerPukColliding() {
@@ -320,5 +328,55 @@ function timer() {
     if (seconds > 9) {
         appendSeconds = seconds;
     }
+
+
+
+}
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    update();
+});
+window.addEventListener('mousemove', function (e) {
+    setCoords(e);
+
+});
+
+document.addEventListener('keyup', function (event) {
+    if (event.keyCode == 27) {
+        if (!pause) {
+            modal_text.innerHTML = "Pause!";
+            modal.style.display = "block";
+            pause = true;
+            clearInterval(interval);
+        } else {
+            end_pause();
+        }
+    }
+})
+
+window.onload = function () {
+    // Get the modal
+    modal = document.getElementById('popup');
+
+    modal_text = document.getElementById('popup_text');
+
+    // Get the <span> element that closes the modal
+    modal_close = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    modal_close.onclick = function () {
+        end_pause();
+    }
+
+}
+
+function end_pause() {
+    modal.style.display = "none";
+    pause = false;
+    clearInterval(interval);
+    interval = setInterval(timer, 10);
+    update();
 
 }
