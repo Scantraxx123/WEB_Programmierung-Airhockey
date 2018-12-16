@@ -93,8 +93,12 @@ function update() {
         var name = document.createTextNode("Dein Name: ");
         var mybr = document.createElement('br');
         var btn = document.createElement("BUTTON");
-        var t = document.createTextNode("CLICK ME");
-        btn.appendChild(t);
+        btn.innerHTML = "Submit!";
+        btn.onclick = function () {
+            addEntry(input.value, parseFloat(appendSeconds + "." + appendTens));
+            window.location.replace("highscore.html");
+        };
+
 
         input.setAttribute("type", "text");
 
@@ -105,6 +109,7 @@ function update() {
         modal_text.appendChild(mybr);
         modal_text.appendChild(name);
         modal_text.appendChild(input);
+        modal_text.appendChild(mybr);
         modal_text.appendChild(btn);
 
 
