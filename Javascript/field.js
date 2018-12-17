@@ -3,8 +3,10 @@
 /* global window */
 "use strict";
 
-var fieldContext = null;
-var fieldCanvas = null;
+var backgroundContext = null;
+var backgroundLayer = null;
+var gameContext = null;
+var gameLayer = null;
 
 var scoreCanvas = null;
 var scoreContext = null;
@@ -56,28 +58,34 @@ var interval = null;
 
 function init() {
 
-    fieldCanvas = document.getElementById('field');
-    fieldContext = fieldCanvas.getContext("2d");
+    backgroundLayer = document.getElementById('background-layer');
+    backgroundContext = backgroundLayer.getContext("2d");
+    gameLayer = document.getElementById('game-layer');
+    gameContext = gameLayer.getContext("2d");
 
-    fieldCanvas.width = 640;
-    fieldCanvas.height = 480;
 
-    puk.x = fieldCanvas.width / 2;
-    puk.y = fieldCanvas.height / 2;
+    backgroundLayer.width = 640;
+    backgroundLayer.height = 480;
 
-    goal2.x = fieldCanvas.width;
+    drawMatchfield();
+
+
+    puk.x = gameLayer.width / 2;
+    puk.y = gameLayer.height / 2;
+
+    goal2.x = gameLayer.width;
 
     scoreCanvas = document.getElementById('score');
     scoreContext = scoreCanvas.getContext("2d");
 
-    scoreCanvas.width = fieldCanvas.width;
+    scoreCanvas.width = backgroundLayer.width;
 
     interval = setInterval(timer, 10);
 }
 
 function reset() {
-    puk.x = fieldCanvas.width / 2;
-    puk.y = fieldCanvas.height / 2;
+    puk.x = gameLayer.width / 2;
+    puk.y = gameLayer.height / 2;
     puk.speed = 0;
     xspeed = 0;
     yspeed = 0;
@@ -118,14 +126,14 @@ function update() {
         pause = true;
         clearInterval(interval);
         scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-        drawMatchfield();
+        drawScore();
     }
     if (!pause) {
 
         requestAnimationFrame(update);
-        fieldContext.clearRect(0, 0, fieldCanvas.width, fieldCanvas.height);
+        gameContext.clearRect(0, 0, gameLayer.width, gameLayer.height);
         scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-        drawMatchfield();
+        drawScore();
         drawPuk();
         drawPlayer();
 
@@ -162,13 +170,13 @@ function checkGoal() {
 }
 
 function checkFieldColliding() {
-    if (puk.x + puk.r > fieldCanvas.width || puk.x < puk.r) {
+    if (puk.x + puk.r > backgroundLayer.width || puk.x < puk.r) {
 
         if (checkGoal())
             return;
 
-        if (puk.x > fieldCanvas.width - puk.r) {
-            puk.x = fieldCanvas.width - puk.r;
+        if (puk.x > backgroundLayer.width - puk.r) {
+            puk.x = backgroundLayer.width - puk.r;
         } else {
             puk.x = puk.r;
         }
@@ -176,13 +184,13 @@ function checkFieldColliding() {
         xspeed = -xspeed;
     }
 
-    if (puk.y + puk.r > fieldCanvas.height || puk.y < puk.r) {
+    if (puk.y + puk.r > backgroundLayer.height || puk.y < puk.r) {
 
         if (checkGoal())
             return;
 
-        if (puk.y > fieldCanvas.height - puk.r) {
-            puk.y = fieldCanvas.height - puk.r;
+        if (puk.y > backgroundLayer.height - puk.r) {
+            puk.y = backgroundLayer.height - puk.r;
         } else {
             puk.y = puk.r;
         }
@@ -220,20 +228,20 @@ function movePuk() {
 }
 
 function drawPlayer() {
-    fieldContext.save();
-    fieldContext.beginPath();
-    fieldContext.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
-    fieldContext.fillStyle = "#FF0000";
-    fieldContext.stroke();
-    fieldContext.fill();
+    gameContext.save();
+    gameContext.beginPath();
+    gameContext.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
+    gameContext.fillStyle = "#FF0000";
+    gameContext.stroke();
+    gameContext.fill();
 }
 
 function drawPuk() {
-    fieldContext.save();
-    fieldContext.beginPath();
-    fieldContext.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
-    fieldContext.fillStyle = "#000000";
-    fieldContext.fill();
+    gameContext.save();
+    gameContext.beginPath();
+    gameContext.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
+    gameContext.fillStyle = "#000000";
+    gameContext.fill();
 }
 
 
@@ -242,71 +250,74 @@ function drawMatchfield() {
 
 
 
-    fieldContext.beginPath();
-    fieldContext.moveTo(fieldCanvas.width / 2, 0);
-    fieldContext.lineTo(fieldCanvas.width / 2, fieldCanvas.height);
-    fieldContext.strokeStyle = "#FF0000";
-    fieldContext.stroke();
+    backgroundContext.beginPath();
+    backgroundContext.moveTo(backgroundLayer.width / 2, 0);
+    backgroundContext.lineTo(backgroundLayer.width / 2, backgroundLayer.height);
+    backgroundContext.strokeStyle = "#FF0000";
+    backgroundContext.stroke();
 
-    fieldContext.beginPath();
-    fieldContext.arc(fieldCanvas.width / 2, fieldCanvas.height / 2, 10, 0, 2 * Math.PI);
-    fieldContext.fillStyle = '#FF0000';
-    fieldContext.fill();
+    backgroundContext.beginPath();
+    backgroundContext.arc(backgroundLayer.width / 2, backgroundLayer.height / 2, 10, 0, 2 * Math.PI);
+    backgroundContext.fillStyle = '#FF0000';
+    backgroundContext.fill();
 
-    fieldContext.beginPath();
-    fieldContext.arc(0, fieldCanvas.height / 2, 80, 1.5 * Math.PI, 0.5 * Math.PI);
-    fieldContext.strokeStyle = "#0000FF";
-    fieldContext.stroke();
+    backgroundContext.beginPath();
+    backgroundContext.arc(0, backgroundLayer.height / 2, 80, 1.5 * Math.PI, 0.5 * Math.PI);
+    backgroundContext.strokeStyle = "#0000FF";
+    backgroundContext.stroke();
 
-    fieldContext.beginPath();
-    fieldContext.arc(fieldCanvas.width, fieldCanvas.height / 2, 80, 0.5 * Math.PI, 1.5 * Math.PI);
-    fieldContext.stroke();
+    backgroundContext.beginPath();
+    backgroundContext.arc(backgroundLayer.width, backgroundLayer.height / 2, 80, 0.5 * Math.PI, 1.5 * Math.PI);
+    backgroundContext.stroke();
 
-    fieldContext.beginPath();
-    fieldContext.arc(fieldCanvas.width / 2, fieldCanvas.height / 2, 80, 0, 2 * Math.PI);
-    fieldContext.stroke();
+    backgroundContext.beginPath();
+    backgroundContext.arc(backgroundLayer.width / 2, backgroundLayer.height / 2, 80, 0, 2 * Math.PI);
+    backgroundContext.stroke();
 
-
-
-    scoreContext.font = '60pt Timew New Roman';
-    scoreContext.fillStyle = 'white';
-    scoreContext.fillText(playerGoals, fieldCanvas.width / 2 - 90, 120, 50);
-    scoreContext.fillText(":", fieldCanvas.width / 2 - 10, 120);
-    scoreContext.fillText(computerGoals, fieldCanvas.width / 2 + 40, 120);
-
-    scoreContext.font = '40pt Timew New Roman';
-    scoreContext.fillText(appendSeconds + ":" + appendTens, fieldCanvas.width / 2 - 100, 50);
 
 
 
 }
 
+function drawScore() {
+
+
+    scoreContext.font = '60pt Timew New Roman';
+    scoreContext.fillStyle = 'white';
+    scoreContext.fillText(playerGoals, backgroundLayer.width / 2 - 90, 120, 50);
+    scoreContext.fillText(":", backgroundLayer.width / 2 - 10, 120);
+    scoreContext.fillText(computerGoals, backgroundLayer.width / 2 + 40, 120);
+
+    scoreContext.font = '40pt Timew New Roman';
+    scoreContext.fillText(appendSeconds + ":" + appendTens, backgroundLayer.width / 2 - 100, 50);
+
+}
 
 
 
 function setCoords(event) {
 
-    var rect = fieldCanvas.getBoundingClientRect();
+    var rect = backgroundLayer.getBoundingClientRect();
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     //left and right
-    if (y < player.r && x + player.r > fieldCanvas.width / 2) {
-        player.x = fieldCanvas.width / 2 - player.r;
+    if (y < player.r && x + player.r > backgroundLayer.width / 2) {
+        player.x = backgroundLayer.width / 2 - player.r;
         player.y = player.r;
     } else if (x < player.r) {
         player.x = player.r;
-    } else if (x + player.r > fieldCanvas.width / 2) {
-        player.x = fieldCanvas.width / 2 - player.r;
+    } else if (x + player.r > backgroundLayer.width / 2) {
+        player.x = backgroundLayer.width / 2 - player.r;
     } else player.x = x;
 
     //top and down
-    if (x < player.r && y + player.r > fieldCanvas.height) {
+    if (x < player.r && y + player.r > backgroundLayer.height) {
         player.x = player.r;
-        player.y = fieldCanvas.height - player.r;
+        player.y = backgroundLayer.height - player.r;
     } else if (y < player.r) {
         player.y = player.r;
-    } else if (y + player.r > fieldCanvas.height) {
-        player.y = fieldCanvas.height - player.r;
+    } else if (y + player.r > backgroundLayer.height) {
+        player.y = backgroundLayer.height - player.r;
     } else player.y = y;
 
 }

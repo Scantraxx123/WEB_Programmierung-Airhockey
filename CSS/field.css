@@ -1,4 +1,4 @@
-.main_box {
+#main_box {
     position: relative;
     margin: 50px auto 0;
     background: linear-gradient(45deg, #fff, #D8D8D8, #fff);
@@ -6,8 +6,8 @@
     height: 480px;
 }
 
-.main_box:before,
-.main_box:after {
+#main_box:before,
+#main_box:after {
     content: '';
     position: absolute;
     top: -3px;
@@ -21,9 +21,24 @@
 }
 
 
-.main_box:after {
+#main_box:after {
     filter: blur(15px);
 }
+
+#background-layer {
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+#game-layer {
+    z-index: 2;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
 
 body {
     margin: 0;
