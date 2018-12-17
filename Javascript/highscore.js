@@ -70,7 +70,7 @@ function displayScore() {
 
         }
 
-        document.getElementById("demo").innerHTML = highscore;
+        document.getElementById("Score").innerHTML = highscore;
     }
 
 }

@@ -23,6 +23,12 @@ var player = {
     r: 30
 };
 
+var computer = {
+    x: 0,
+    y: 0,
+    r: 30
+};
+
 var puk = {
     x: 0,
     y: 0,
@@ -75,6 +81,9 @@ function init() {
 
     goal2.x = gameLayer.width;
 
+    computer.x = 500;
+    computer.y = 240;
+
     scoreCanvas = document.getElementById('score');
     scoreContext = scoreCanvas.getContext("2d");
 
@@ -83,60 +92,24 @@ function init() {
     interval = setInterval(timer, 10);
 }
 
-function reset() {
-    puk.x = gameLayer.width / 2;
-    puk.y = gameLayer.height / 2;
-    puk.speed = 0;
-    xspeed = 0;
-    yspeed = 0;
-
-}
 
 
 function update() {
     if (playerGoals == 10) {
-        var input = document.createElement("INPUT");
-        var para = document.createElement("P");
-        var time = document.createTextNode("Deine Zeit: " + appendSeconds + ":" + appendTens);
-        var name = document.createTextNode("Dein Name: ");
-        var mybr = document.createElement('br');
-        var btn = document.createElement("BUTTON");
-        btn.innerHTML = "Submit!";
-        btn.onclick = function () {
-            addEntry(input.value, parseFloat(appendSeconds + "." + appendTens));
-            window.location.replace("highscore.html");
-        };
-
-
-        input.setAttribute("type", "text");
-
-        modal_text.innerHTML = "Glückwunsch! Du hast gewonnen!";
-        modal_text.appendChild(mybr);
-        para.appendChild(time);
-        modal_text.appendChild(para);
-        modal_text.appendChild(mybr);
-        modal_text.appendChild(name);
-        modal_text.appendChild(input);
-        modal_text.appendChild(mybr);
-        modal_text.appendChild(btn);
-
-
-        modal.style.display = "block";
-
-        pause = true;
-        clearInterval(interval);
-        scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-        drawScore();
+        popup(true);
     }
-    if (!pause) {
+    if (computerGoals == 10) {
+        popup(false);
+    }
 
+    if (!pause) {
         requestAnimationFrame(update);
         gameContext.clearRect(0, 0, gameLayer.width, gameLayer.height);
         scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
         drawScore();
         drawPuk();
         drawPlayer();
-
+        drawComputer();
 
         checkFieldColliding();
 
@@ -150,9 +123,32 @@ function update() {
             xspeed = dx * puk.speed;
             yspeed = dy * puk.speed;
         }
+        if (ComputerPukColliding()) {
+            puk.speed = 20;
+
+            var dx = puk.x - computer.x;
+            var dy = puk.y - computer.y;
+            dx /= 30;
+            dy /= 30;
+            xspeed = dx * puk.speed;
+            yspeed = dy * puk.speed;
+
+        }
+        moveComputer();
         movePuk();
     }
 }
+
+function moveComputer() {
+    if (computer.y < puk.y) {
+        computer.y += 2;
+    }
+    if (computer.y > puk.y) {
+        computer.y -= 2;
+    }
+
+}
+
 
 function checkGoal() {
 
@@ -168,6 +164,24 @@ function checkGoal() {
     }
 
 }
+
+function reset() {
+    puk.x = gameLayer.width / 2;
+    puk.y = gameLayer.height / 2;
+    puk.speed = 0;
+    xspeed = 0;
+    yspeed = 0;
+
+}
+
+function goalOneCollision() {
+    return puk.x - puk.r < goal1.x && puk.y > goal1.y1 && puk.y < goal1.y2
+}
+
+function goalTwoCollision() {
+    return puk.x + puk.r > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
+}
+
 
 function checkFieldColliding() {
     if (puk.x + puk.r > backgroundLayer.width || puk.x < puk.r) {
@@ -198,19 +212,20 @@ function checkFieldColliding() {
     }
 }
 
-function goalOneCollision() {
-    return puk.x - puk.r < goal1.x && puk.y > goal1.y1 && puk.y < goal1.y2
-}
-
-function goalTwoCollision() {
-    return puk.x + puk.r > goal2.x && puk.y > goal1.y1 && puk.y < goal1.y2
-}
 
 
 function PlayerPukColliding() {
     var dx = puk.x - player.x;
     var dy = puk.y - player.y;
     var radiusSum = player.r + puk.r;
+
+    return dx * dx + dy * dy <= radiusSum * radiusSum;
+}
+
+function ComputerPukColliding() {
+    var dx = puk.x - computer.x;
+    var dy = puk.y - computer.y;
+    var radiusSum = computer.r + puk.r;
 
     return dx * dx + dy * dy <= radiusSum * radiusSum;
 }
@@ -223,14 +238,21 @@ function movePuk() {
     xspeed *= 0.99;
     yspeed *= 0.99;
 
-
-
 }
 
 function drawPlayer() {
     gameContext.save();
     gameContext.beginPath();
     gameContext.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
+    gameContext.fillStyle = "#FF0000";
+    gameContext.stroke();
+    gameContext.fill();
+}
+
+function drawComputer() {
+    gameContext.save();
+    gameContext.beginPath();
+    gameContext.arc(computer.x, computer.y, player.r, 0, 2 * Math.PI);
     gameContext.fillStyle = "#FF0000";
     gameContext.stroke();
     gameContext.fill();
@@ -294,34 +316,6 @@ function drawScore() {
 }
 
 
-
-function setCoords(event) {
-
-    var rect = backgroundLayer.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    //left and right
-    if (y < player.r && x + player.r > backgroundLayer.width / 2) {
-        player.x = backgroundLayer.width / 2 - player.r;
-        player.y = player.r;
-    } else if (x < player.r) {
-        player.x = player.r;
-    } else if (x + player.r > backgroundLayer.width / 2) {
-        player.x = backgroundLayer.width / 2 - player.r;
-    } else player.x = x;
-
-    //top and down
-    if (x < player.r && y + player.r > backgroundLayer.height) {
-        player.x = player.r;
-        player.y = backgroundLayer.height - player.r;
-    } else if (y < player.r) {
-        player.y = player.r;
-    } else if (y + player.r > backgroundLayer.height) {
-        player.y = backgroundLayer.height - player.r;
-    } else player.y = y;
-
-}
-
 function timer() {
     tens++;
 
@@ -351,6 +345,98 @@ function timer() {
 
 
 
+function popup(win) {
+    if (win) {
+        var input = document.createElement("INPUT");
+        var para = document.createElement("P");
+        var time = document.createTextNode("Deine Zeit: " + appendSeconds + ":" + appendTens);
+        var name = document.createTextNode("Dein Name: ");
+        var mybr = document.createElement('br');
+        var btn = document.createElement("BUTTON");
+        btn.innerHTML = "Submit!";
+        btn.onclick = function () {
+            addEntry(input.value, parseFloat(appendSeconds + "." + appendTens));
+            window.location.replace("highscore.html");
+        };
+
+
+        input.setAttribute("type", "text");
+
+        modal_text.innerHTML = "Glückwunsch! Du hast gewonnen!";
+        modal_text.appendChild(mybr);
+        para.appendChild(time);
+        modal_text.appendChild(para);
+        modal_text.appendChild(mybr);
+        modal_text.appendChild(name);
+        modal_text.appendChild(input);
+        modal_text.appendChild(mybr);
+        modal_text.appendChild(btn);
+    } else {
+        modal_text.innerHTML = "Sie haben verloren!";
+        var btn = document.createElement("BUTTON");
+        btn.innerHTML = "New Game!";
+        btn.onclick = function () {
+            window.location.replace("field.html");
+        };
+        modal_text.appendChild(btn);
+        var btn1 = document.createElement("BUTTON");
+        btn1.innerHTML = "Exit!";
+        btn1.onclick = function () {
+            window.location.replace("../index.html");
+        };
+        modal_text.appendChild(btn1);
+    }
+
+
+    modal.style.display = "block";
+
+    pause = true;
+    clearInterval(interval);
+    scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+    drawScore();
+
+}
+
+
+
+function setCoords(event) {
+
+    var rect = backgroundLayer.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    //left and right
+    if (y < player.r && x + player.r > backgroundLayer.width / 2) {
+        player.x = backgroundLayer.width / 2 - player.r;
+        player.y = player.r;
+    } else if (x < player.r) {
+        player.x = player.r;
+    } else if (x + player.r > backgroundLayer.width / 2) {
+        player.x = backgroundLayer.width / 2 - player.r;
+    } else player.x = x;
+
+    //top and down
+    if (x < player.r && y + player.r > backgroundLayer.height) {
+        player.x = player.r;
+        player.y = backgroundLayer.height - player.r;
+    } else if (y < player.r) {
+        player.y = player.r;
+    } else if (y + player.r > backgroundLayer.height) {
+        player.y = backgroundLayer.height - player.r;
+    } else player.y = y;
+
+}
+
+function end_pause() {
+    modal.style.display = "none";
+    pause = false;
+    clearInterval(interval);
+    interval = setInterval(timer, 10);
+    update();
+
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     update();
 });
@@ -358,6 +444,7 @@ window.addEventListener('mousemove', function (e) {
     setCoords(e);
 
 });
+
 
 document.addEventListener('keyup', function (event) {
     if (event.keyCode == 27) {
@@ -385,14 +472,5 @@ window.onload = function () {
     modal_close.onclick = function () {
         end_pause();
     }
-
-}
-
-function end_pause() {
-    modal.style.display = "none";
-    pause = false;
-    clearInterval(interval);
-    interval = setInterval(timer, 10);
-    update();
 
 }
