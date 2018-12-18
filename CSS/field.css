@@ -1,3 +1,11 @@
+#score,
+#time {
+    color: white;
+    font-size: 25px;
+    text-align: center;
+
+}
+
 #main_box {
     position: relative;
     margin: 50px auto 0;

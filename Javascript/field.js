@@ -7,9 +7,8 @@ var backgroundContext = null;
 var backgroundLayer = null;
 var gameContext = null;
 var gameLayer = null;
-
-var scoreCanvas = null;
-var scoreContext = null;
+var time = null;
+var score = null;
 
 var xspeed = 0;
 var yspeed = 0;
@@ -61,6 +60,8 @@ var appendTens = "";
 var appendSeconds = "";
 var interval = null;
 
+var dx = 0;
+var dy = 0;
 
 function init() {
 
@@ -68,6 +69,9 @@ function init() {
     backgroundContext = backgroundLayer.getContext("2d");
     gameLayer = document.getElementById('game-layer');
     gameContext = gameLayer.getContext("2d");
+
+    time = document.getElementById('time');
+    score = document.getElementById('score');
 
 
     backgroundLayer.width = 640;
@@ -84,11 +88,6 @@ function init() {
     computer.x = 500;
     computer.y = 240;
 
-    scoreCanvas = document.getElementById('score');
-    scoreContext = scoreCanvas.getContext("2d");
-
-    scoreCanvas.width = backgroundLayer.width;
-
     interval = setInterval(timer, 10);
 }
 
@@ -103,9 +102,7 @@ function update() {
     }
 
     if (!pause) {
-        requestAnimationFrame(update);
         gameContext.clearRect(0, 0, gameLayer.width, gameLayer.height);
-        scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
         drawScore();
         drawPuk();
         drawPlayer();
@@ -116,8 +113,8 @@ function update() {
         if (PlayerPukColliding()) {
             puk.speed = 20;
 
-            var dx = puk.x - player.x;
-            var dy = puk.y - player.y;
+            dx = puk.x - player.x;
+            dy = puk.y - player.y;
             dx /= 30;
             dy /= 30;
             xspeed = dx * puk.speed;
@@ -126,8 +123,8 @@ function update() {
         if (ComputerPukColliding()) {
             puk.speed = 20;
 
-            var dx = puk.x - computer.x;
-            var dy = puk.y - computer.y;
+            dx = puk.x - computer.x;
+            dy = puk.y - computer.y;
             dx /= 30;
             dy /= 30;
             xspeed = dx * puk.speed;
@@ -136,6 +133,8 @@ function update() {
         }
         moveComputer();
         movePuk();
+
+        window.requestAnimationFrame(update);
     }
 }
 
@@ -241,7 +240,6 @@ function movePuk() {
 }
 
 function drawPlayer() {
-    gameContext.save();
     gameContext.beginPath();
     gameContext.arc(player.x, player.y, player.r, 0, 2 * Math.PI);
     gameContext.fillStyle = "#FF0000";
@@ -250,7 +248,6 @@ function drawPlayer() {
 }
 
 function drawComputer() {
-    gameContext.save();
     gameContext.beginPath();
     gameContext.arc(computer.x, computer.y, player.r, 0, 2 * Math.PI);
     gameContext.fillStyle = "#FF0000";
@@ -259,7 +256,7 @@ function drawComputer() {
 }
 
 function drawPuk() {
-    gameContext.save();
+
     gameContext.beginPath();
     gameContext.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
     gameContext.fillStyle = "#000000";
@@ -269,8 +266,6 @@ function drawPuk() {
 
 
 function drawMatchfield() {
-
-
 
     backgroundContext.beginPath();
     backgroundContext.moveTo(backgroundLayer.width / 2, 0);
@@ -302,17 +297,8 @@ function drawMatchfield() {
 }
 
 function drawScore() {
-
-
-    scoreContext.font = '60pt Timew New Roman';
-    scoreContext.fillStyle = 'white';
-    scoreContext.fillText(playerGoals, backgroundLayer.width / 2 - 90, 120, 50);
-    scoreContext.fillText(":", backgroundLayer.width / 2 - 10, 120);
-    scoreContext.fillText(computerGoals, backgroundLayer.width / 2 + 40, 120);
-
-    scoreContext.font = '40pt Timew New Roman';
-    scoreContext.fillText(appendSeconds + ":" + appendTens, backgroundLayer.width / 2 - 100, 50);
-
+    score.innerHTML = playerGoals + " : " + computerGoals;
+    time.innerHTML = appendSeconds + " : " + appendTens;
 }
 
 
@@ -327,7 +313,6 @@ function timer() {
         appendTens = tens;
 
     }
-
     if (tens > 99) {
         seconds++;
         appendSeconds = "0" + seconds;
@@ -392,7 +377,6 @@ function popup(win) {
 
     pause = true;
     clearInterval(interval);
-    scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     drawScore();
 
 }
@@ -432,7 +416,6 @@ function end_pause() {
     clearInterval(interval);
     interval = setInterval(timer, 10);
     update();
-
 }
 
 
