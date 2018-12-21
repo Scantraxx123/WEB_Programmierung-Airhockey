@@ -92,7 +92,31 @@ function end_pause() {
 document.addEventListener('keyup', function (event) {
     if (event.keyCode == 27) {
         if (!pause) {
-            modal_text.innerHTML = "Pause!";
+            modal_text.innerHTML = "Pause!<br><br>Drücke ESC um wieder zum Spiel zu gelangen!<br><br>";
+            var newGameButton = document.createElement("BUTTON");
+            newGameButton.innerHTML = "New Game";
+            newGameButton.onclick = function () {
+                window.location.replace("field.html");
+            };
+            var highscoreButton = document.createElement("BUTTON");
+            highscoreButton.innerHTML = "Highscore";
+            highscoreButton.onclick = function () {
+                window.location.replace("highscore.html");
+            };
+            var helpButton = document.createElement("BUTTON");
+            helpButton.innerHTML = "Help";
+            helpButton.onclick = function () {
+                window.location.replace("help.html");
+            };
+            var exitButton = document.createElement("BUTTON");
+            exitButton.innerHTML = "Exit";
+            exitButton.onclick = function () {
+                window.location.replace("../index.html");
+            };
+            modal_text.appendChild(newGameButton);
+            modal_text.appendChild(highscoreButton);
+            modal_text.appendChild(helpButton);
+            modal_text.appendChild(exitButton);
             modal.style.display = "block";
             pause = true;
             clearInterval(interval);
