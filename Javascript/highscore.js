@@ -3,7 +3,6 @@
 /* global window */
 "use strict";
 
-
 var highScoreEntries;
 
 function highScoreEntry(name, time) {
@@ -24,7 +23,7 @@ function addEntry(name, time) {
         for (i = 0; i < highScoreEntries.length; i++) {
             if (highScoreEntries[i].time > time) {
                 highScoreEntries.splice(i, 0, newUser);
-                if (highScoreEntries.length >= 10) {
+                if (highScoreEntries.length > 10) {
                     highScoreEntries.splice(-1, 1);
                 }
                 setLocalStorage();
@@ -56,6 +55,22 @@ function getHighscore() {
 
 }
 
+function isHighscore(time) {
+    getHighscore();
+    if (highScoreEntries == null || highScoreEntries.length < 10) {
+        return true;
+    } else {
+        var i;
+        for (i = 0; i < highScoreEntries.length; i++) {
+            if (highScoreEntries[i].time > time) {
+                return true;
+            }
+
+
+        }
+    }
+    return false;
+}
 
 function displayScore() {
     getHighscore();
