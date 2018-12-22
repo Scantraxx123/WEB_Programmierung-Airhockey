@@ -3,9 +3,15 @@
 /* global window */
 "use strict";
 
-var modal = null;
 var modal_close = null;
-var modal_text = "";
+var modal_pause = null;
+var modal_loose = null;
+var modal_win = null;
+var time_text = null;
+var highscore_text = null;
+var highscore_form = null;
+var input_name = null;
+var submit_Highscore = null;
 
 
 
@@ -13,75 +19,30 @@ function popup(win) {
     if (win) {
         winPopUp();
     } else {
-        loosePopUp();
+        modal_loose.style.display = "block";
     }
-    modal.style.display = "block";
-
     pause = true;
     clearInterval(interval);
     drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens);
 }
 
 function winPopUp() {
-    var exitButton = document.createElement("BUTTON");
-    exitButton.innerHTML = "Exit";
-    exitButton.onclick = function () {
-        window.location.replace("../index.html");
-    };
-    var newGameButton = document.createElement("BUTTON");
-    newGameButton.innerHTML = "New Game";
-    newGameButton.onclick = function () {
-        window.location.replace("field.html");
-    };
 
-    modal_text.innerHTML = "Glückwunsch! Du hast gewonnen!<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
+    time_text.innerHTML = "Glückwunsch! Du hast gewonnen!<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
+    modal_win.style.display = "block";
 
     if (isHighscore(parseFloat(appendSeconds + "." + appendTens))) {
-        var nameInput = document.createElement("INPUT");
-        nameInput.setAttribute("type", "text");
-
-        var submitButton = document.createElement("BUTTON");
-        submitButton.innerHTML = "Submit!";
-        submitButton.onclick = function () {
-            addEntry(nameInput.value, parseFloat(appendSeconds + "." + appendTens));
-            window.location.replace("highscore.html");
-        };
-
-        modal_text.innerHTML += "<br><br>Deine Zeit wird in die Highscoreliste aufgenommen!<br><br>Dein Name: ";
-        modal_text.appendChild(nameInput);
-        modal_text.innerHTML += "<br><br>";
-        modal_text.appendChild(submitButton);
+        highscore_text.innerHTML = "Deine Zeit wird in die Highscoreliste aufgenommen!";
+        highscore_form.style.display = "block";
     } else {
-        modal_text.innerHTML += "<br><br>Deine Zeit hat nicht gereicht! Versuch es erneut!<br><br>";
+        highscore_text.innerHTML = "Deine Zeit hat nicht für den Highscore gereicht! Versuche es erneut!";
     }
 
-    modal_text.appendChild(newGameButton);
-    modal_text.appendChild(exitButton);
-
-}
-
-function loosePopUp() {
-    var newGameButton = document.createElement("BUTTON");
-    newGameButton.innerHTML = "New Game!";
-    newGameButton.onclick = function () {
-        window.location.replace("field.html");
-    };
-
-    var exitButton = document.createElement("BUTTON");
-    exitButton.innerHTML = "Exit";
-    exitButton.onclick = function () {
-        window.location.replace("../index.html");
-    };
-
-
-    modal_text.innerHTML = "Du hast verloren!<br><br>";
-    modal_text.appendChild(newGameButton);
-    modal_text.appendChild(exitButton);
 }
 
 
 function end_pause() {
-    modal.style.display = "none";
+    modal_pause.style.display = "none";
     pause = false;
     clearInterval(interval);
     interval = setInterval(timer, 10);
@@ -92,32 +53,7 @@ function end_pause() {
 document.addEventListener('keyup', function (event) {
     if (event.keyCode == 27) {
         if (!pause) {
-            modal_text.innerHTML = "Pause!<br><br>Drücke ESC um wieder zum Spiel zu gelangen!<br><br>";
-            var newGameButton = document.createElement("BUTTON");
-            newGameButton.innerHTML = "New Game";
-            newGameButton.onclick = function () {
-                window.location.replace("field.html");
-            };
-            var highscoreButton = document.createElement("BUTTON");
-            highscoreButton.innerHTML = "Highscore";
-            highscoreButton.onclick = function () {
-                window.location.replace("highscore.html");
-            };
-            var helpButton = document.createElement("BUTTON");
-            helpButton.innerHTML = "Help";
-            helpButton.onclick = function () {
-                window.location.replace("help.html");
-            };
-            var exitButton = document.createElement("BUTTON");
-            exitButton.innerHTML = "Exit";
-            exitButton.onclick = function () {
-                window.location.replace("../index.html");
-            };
-            modal_text.appendChild(newGameButton);
-            modal_text.appendChild(highscoreButton);
-            modal_text.appendChild(helpButton);
-            modal_text.appendChild(exitButton);
-            modal.style.display = "block";
+            modal_pause.style.display = "block";
             pause = true;
             clearInterval(interval);
         } else {
@@ -127,17 +63,26 @@ document.addEventListener('keyup', function (event) {
 })
 
 window.onload = function () {
-    // Get the modal
-    modal = document.getElementById('popup');
-
-    modal_text = document.getElementById('popup_text');
-
-    // Get the <span> element that closes the modal
+    modal_pause = document.getElementById('modalPause');
     modal_close = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on <span> (x), close the modal
     modal_close.onclick = function () {
         end_pause();
     }
+
+    modal_loose = document.getElementById('modalLoose');
+
+
+    modal_win = document.getElementById('modalWin');
+    time_text = document.getElementById('timeText');
+    input_name = document.getElementById('inputName');
+
+    submit_Highscore = document.getElementById('submitHighscore');
+    submit_Highscore.onclick = function () {
+        addEntry(input_name.value, parseFloat(appendSeconds + "." + appendTens));
+    }
+
+    highscore_text = document.getElementById('highscoreText');
+    highscore_form = document.getElementById('highscoreForm');
+    highscore_form.style.display = "none";
 
 }

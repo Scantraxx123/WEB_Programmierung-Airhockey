@@ -26,16 +26,52 @@
         <canvas id="background-layer" width="640" height="480" style="text-align: center"></canvas>
     </div>
 
-
-    <div id="popup" class="modal">
+    <div id="modalPause" class="modal">
         <div class="modal-content"> <span class="close">&times;</span>
-            <p id="popup_text"></p>
+            <p>Pause!<br><br>
+                Drücke ESC um wieder zum Spiel zu gelangen!</p>
+            <form action="field.html">
+                <div style="text-align:center;">
+                    <br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
+                    <button class="button" style="vertical-align:middle" formaction="highscore.html"><span>Highscore</span></button>
+                    <button class="button" style="vertical-align:middle" formaction="help.html"><span>Help</span></button>
+                    <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
+                </div>
+            </form>
         </div>
     </div>
 
+    <div id="modalLoose" class="modal">
+        <div class="modal-content">
+            <p>Du hast verloren!</p>
+            <form action="field.html">
+                <div style="text-align:center;">
+                    <br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
+                    <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modalWin" class="modal">
+        <div class="modal-content">
+            <p id="timeText"></p>
+            <p id="highscoreText"></p>
+            <form id="highscoreForm" action="highscore.html">
+                Name: <input type="text" id="inputName"><br><br>
+                <input type="submit" value="Submit" id="submitHighscore">
+            </form>
+            <form action="field.html">
+                <div style="text-align:center;">
+                    <br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
+                    <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <script>
         init();
-
     </script>
 </body>
 

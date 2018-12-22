@@ -88,10 +88,10 @@ function init() {
 
 
 function update() {
-    if (playerGoals == 10) {
+    if (playerGoals == 1) {
         popup(true);
     }
-    if (computerGoals == 10) {
+    if (computerGoals == 1) {
         popup(false);
     }
     if (!pause) {
