@@ -58,6 +58,9 @@ var appendSeconds = "";
 var interval = null;
 
 
+
+
+
 function init() {
 
     backgroundLayer = document.getElementById('background-layer');
@@ -82,22 +85,22 @@ function init() {
     computer.y = 240;
 
     interval = setInterval(timer, 10);
-    var audio = new Audio('../Music/game_music.mp3');
-    audio.play();
 }
 
 
 
 function update() {
-    if (playerGoals == 10) {
+    if (playerGoals === 10) {
         popup(true);
+        endGameMusic(true);
     }
-    if (computerGoals == 10) {
+    if (computerGoals === 10) {
         popup(false);
+        endGameMusic(false);
     }
     if (!pause) {
         gameContext.clearRect(0, 0, gameLayer.width, gameLayer.height);
-        drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens)
+        drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens);
         drawPuk(gameContext, puk);
         drawPlayer(gameContext, player);
         drawComputer(gameContext, computer, player);
@@ -204,11 +207,11 @@ function reset() {
 }
 
 function goalOneCollision() {
-    return puk.x - puk.r < playerGoal.x && puk.y > playerGoal.y1 && puk.y < playerGoal.y2
+    return puk.x - puk.r < playerGoal.x && puk.y > playerGoal.y1 && puk.y < playerGoal.y2;
 }
 
 function goalTwoCollision() {
-    return puk.x + puk.r > computerGoal.x && puk.y > computerGoal.y1 && puk.y < computerGoal.y2
+    return puk.x + puk.r > computerGoal.x && puk.y > computerGoal.y1 && puk.y < computerGoal.y2;
 }
 
 

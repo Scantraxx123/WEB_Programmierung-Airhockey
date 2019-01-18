@@ -11,15 +11,19 @@
     <script src="../Javascript/draw.js"></script>
     <script src="../Javascript/timer.js"></script>
     <script src="../Javascript/modal.js"></script>
+    <script src="../Javascript/music.js"></script>
 </head>
 
 <body>
+    <input id="musicOnOff" type="image" src="../Images/audio_on.png" />
     <br>
     <div>
         <p id="time">00:00</p>
         <p id="score">0:0</p>
     </div>
 
+    <audio loop id="myAudio" src="../Music/game_music.mp3" preload="auto">
+    </audio>
 
     <div id="main_box" style="text-align:center;">
         <canvas id="game-layer" width="640" height="480" style="text-align: center"></canvas>
@@ -72,6 +76,8 @@
 
     <script>
         init();
+        playMusic()
+
     </script>
 </body>
 

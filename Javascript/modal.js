@@ -51,7 +51,7 @@ function end_pause() {
 
 
 document.addEventListener('keyup', function (event) {
-    if (event.keyCode == 27) {
+    if (event.keyCode === 27) {
         if (!pause) {
             modal_pause.style.display = "block";
             pause = true;
@@ -60,14 +60,14 @@ document.addEventListener('keyup', function (event) {
             end_pause();
         }
     }
-})
+});
 
 window.onload = function () {
     modal_pause = document.getElementById('modalPause');
     modal_close = document.getElementsByClassName("close")[0];
     modal_close.onclick = function () {
         end_pause();
-    }
+    };
 
     modal_loose = document.getElementById('modalLoose');
 
@@ -79,10 +79,10 @@ window.onload = function () {
     submit_Highscore = document.getElementById('submitHighscore');
     submit_Highscore.onclick = function () {
         addEntry(input_name.value, parseFloat(appendSeconds + "." + appendTens));
-    }
+    };
 
     highscore_text = document.getElementById('highscoreText');
     highscore_form = document.getElementById('highscoreForm');
     highscore_form.style.display = "none";
 
-}
+};

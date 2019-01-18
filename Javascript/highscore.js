@@ -5,7 +5,7 @@
 
 var highScoreEntries;
 
-function highScoreEntry(name, time) {
+function HighScoreEntry(name, time) {
     this.name = name;
     this.time = time;
 }
@@ -17,8 +17,8 @@ function setLocalStorage() {
 
 function addEntry(name, time) {
     getHighscore();
-    var newUser = new highScoreEntry(name, time);
-    if (highScoreEntries != null) {
+    var newUser = new HighScoreEntry(name, time);
+    if (highScoreEntries !== null) {
         var i;
         for (i = 0; i < highScoreEntries.length; i++) {
             if (highScoreEntries[i].time > time) {
@@ -33,7 +33,7 @@ function addEntry(name, time) {
         }
     }
 
-    if (highScoreEntries == null) {
+    if (highScoreEntries === null) {
         highScoreEntries = [];
         highScoreEntries.push(newUser);
     } else if (highScoreEntries.length < 10) {
@@ -47,9 +47,9 @@ function getHighscore() {
     var retrievedObject = localStorage.getItem('highScoreEntries');
     highScoreEntries = JSON.parse(retrievedObject);
 
-    if (highScoreEntries != null) {
+    if (highScoreEntries !== null) {
         highScoreEntries.sort(function (a, b) {
-            return a.time - b.time
+            return a.time - b.time;
         });
     }
 
@@ -57,7 +57,7 @@ function getHighscore() {
 
 function isHighscore(time) {
     getHighscore();
-    if (highScoreEntries == null || highScoreEntries.length < 10) {
+    if (highScoreEntries === null || highScoreEntries.length < 10) {
         return true;
     } else {
         var i;
@@ -74,12 +74,12 @@ function isHighscore(time) {
 
 function displayScore() {
     getHighscore();
-    if (highScoreEntries != null) {
-        var i;
-        var highscore = "";
-        for (i = 0; i < highScoreEntries.length; i++) {
+    if (highScoreEntries !== null) {
+        var i = 0,
+            highscore = "";
+        for (i; i < highScoreEntries.length; i++) {
             highscore += i + 1 + " " + highScoreEntries[i].name + " " + highScoreEntries[i].time;
-            if (highScoreEntries.length - 1 != i) {
+            if (highScoreEntries.length - 1 !== i) {
                 highscore += "<br>";
             }
 
