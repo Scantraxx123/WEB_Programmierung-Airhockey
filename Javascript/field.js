@@ -52,7 +52,6 @@ var computerGoal = {
 };
 
 
-
 var pause = false;
 var appendTens = "";
 var appendSeconds = "";
@@ -83,6 +82,8 @@ function init() {
     computer.y = 240;
 
     interval = setInterval(timer, 10);
+    var audio = new Audio('../Music/game_music.mp3');
+    audio.play();
 }
 
 
