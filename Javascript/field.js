@@ -6,6 +6,7 @@
 /* Spielverhalten
    Autor: Felix Willrich, Frederik Rieß, Vanessa Traub */
 
+
 var backgroundContext = null;
 var backgroundLayer = null;
 var gameContext = null;
@@ -144,6 +145,10 @@ function update() {
     }
 }
 
+
+/*
+Simples Bewegen des Computers
+*/
 function moveComputer() {
     if (computer.y < puk.y) {
         computer.y += 2;
@@ -154,6 +159,10 @@ function moveComputer() {
 
 }
 
+/*
+Bewegen des Spielers durch Mausbewegung
+Kollisionen mit eigener Spielhälfte und Reaktion darauf
+*/
 function setCoords(event) {
 
     var rect = backgroundLayer.getBoundingClientRect();
@@ -181,6 +190,10 @@ function setCoords(event) {
 
 }
 
+
+/*
+Bewegen des Puks und Anpassen der Geschwindigkeit
+*/
 function movePuk() {
 
     puk.x += xspeed;
@@ -191,6 +204,9 @@ function movePuk() {
 
 }
 
+/*
+Kontrolle, ob der Puk im Tor ist und Regel danach
+*/
 function checkGoal() {
 
     if (goalOneCollision()) {
@@ -206,6 +222,9 @@ function checkGoal() {
 
 }
 
+/*
+Reseted den Puk in die Mitte des Spielfeldes
+*/
 function reset() {
     puk.x = gameLayer.width / 2;
     puk.y = gameLayer.height / 2;
@@ -215,15 +234,24 @@ function reset() {
 
 }
 
+/*
+Kontrolle ob Puk im Tor des Spielers ist
+*/
 function goalOneCollision() {
     return puk.x - puk.r < playerGoal.x && puk.y > playerGoal.y1 && puk.y < playerGoal.y2;
 }
 
+/*
+Kontrolle ob Puk im Tor des Computers ist
+*/
 function goalTwoCollision() {
     return puk.x + puk.r > computerGoal.x && puk.y > computerGoal.y1 && puk.y < computerGoal.y2;
 }
 
 
+/*
+Behandelt die Kollisionen des Puks mit dem Spielfeld
+*/
 function checkFieldColliding() {
     if (puk.x + puk.r > backgroundLayer.width || puk.x < puk.r) {
         if (checkGoal()) {
@@ -251,7 +279,9 @@ function checkFieldColliding() {
     }
 }
 
-
+/*
+Behandelt Kollision mit Spieler und Puk
+*/
 function PlayerPukColliding() {
     var dx = puk.x - player.x;
     var dy = puk.y - player.y;
@@ -260,6 +290,9 @@ function PlayerPukColliding() {
     return dx * dx + dy * dy <= radiusSum * radiusSum;
 }
 
+/*
+Behandelt Kollision mit Computer und Puk
+*/
 function ComputerPukColliding() {
     var dx = puk.x - computer.x;
     var dy = puk.y - computer.y;
