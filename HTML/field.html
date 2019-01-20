@@ -32,7 +32,7 @@
 
     <div id="modalPause" class="modal">
         <div class="modal-content"> <span class="close">&times;</span>
-            <p><br>~ Päuschen ~<br><br>
+            <p>~ Päuschen ~<br><br>
                 <i>Drücke ESC um wieder zum Spiel zu gelangen!</i></p>
             <form action="field.html">
                 <div style="text-align:center;">
@@ -53,10 +53,10 @@
 
     <div id="modalLoose" class="modal">
         <div class="modal-content">
-            <p>Du hast verloren!</p>
+            <p>Du hast verloren! 😓</p>
             <form action="field.html">
                 <div style="text-align:center;">
-                    <br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
+                    <br><br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
                     <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
                 </div>
             </form>
@@ -64,18 +64,20 @@
     </div>
     <div id="modalWin" class="modal">
         <div class="modal-content">
-            <p id="timeText"></p>
-            <p id="highscoreText"></p>
-            <form id="highscoreForm" action="highscore.html">
-                Name: <input type="text" id="inputName"><br><br>
-                <input type="submit" value="Submit" id="submitHighscore">
-            </form>
-            <form action="field.html">
-                <div style="text-align:center;">
-                    <br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
-                    <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
-                </div>
-            </form>
+            <div style="text-align:center;">
+                <p id="timeText"></p>
+                <p id="highscoreText"></p>
+                <form id="highscoreForm" action="highscore.html">
+                    <p>Name: <input type="text" id="inputName"><br></p>
+                    <input type="submit" value="Submit" id="submitHighscore">
+                </form>
+                <form action="field.html">
+                    <div style="text-align:center;">
+                        <br><br><button class="button" style="vertical-align:middle"><span>New Game</span></button>
+                        <button class="button" style="vertical-align:middle" formaction="../index.html"><span>Exit</span></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

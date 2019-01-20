@@ -28,7 +28,7 @@ function popup(win) {
 
 function winPopUp() {
 
-    time_text.innerHTML = "Glückwunsch! Du hast gewonnen!<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
+    time_text.innerHTML = "Glückwunsch! Du hast gewonnen! 😎<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
     modal_win.style.display = "block";
 
     if (isHighscore(parseFloat(appendSeconds + "." + appendTens))) {
