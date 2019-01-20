@@ -3,6 +3,9 @@
 /* global window */
 "use strict";
 
+/* Popups für das Spiel = Pause, Win, Loose Popup
+   Autor: Felix Willrich, Frederik Rieß, Vanessa Traub */
+
 var modal_close = null;
 var modal_pause = null;
 var modal_loose = null;
@@ -14,7 +17,11 @@ var input_name = null;
 var submit_Highscore = null;
 
 
-
+/*
+Unterscheidung, ob Spieler gewonnen oder verloren hat dementsprechend wird das jeweilige Popup angezeigt
+Der Timer wird gestoppt, sowie der letzte Zeitpunkt gezeichnet und danach wird das Spiel angehalten.
+win = Boolean, der angibt ob Spieler gewonnen
+*/
 function popup(win) {
     if (win) {
         winPopUp();
@@ -26,6 +33,10 @@ function popup(win) {
     drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens);
 }
 
+/*
+Popup wird erweitert, sobald Spieler gewonnen hat
+Zeit wird angezeigt und gleichzeitig wird überprüft, ob der Spieler einen Highscore erspielt hat
+*/
 function winPopUp() {
 
     time_text.innerHTML = "Glückwunsch! Du hast gewonnen! 😎<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
@@ -40,7 +51,10 @@ function winPopUp() {
 
 }
 
-
+/*
+Spieler beendet Pause über ESC, Popup wird geschlossen,
+Timer gestartet und die Update Methode wieder ausgeführt
+*/
 function end_pause() {
     modal_pause.style.display = "none";
     pause = false;
@@ -49,7 +63,9 @@ function end_pause() {
     update();
 }
 
-
+/*
+EventListener für das Pausepopup, Esc um Pause einzuleiten
+*/
 document.addEventListener('keyup', function (event) {
     if (event.keyCode === 27) {
         if (!pause) {
@@ -62,6 +78,11 @@ document.addEventListener('keyup', function (event) {
     }
 });
 
+
+/*
+Damit die Popups zum Spielbeginn verfügbar sind, werden diese beim Laden des Fensters initalisiert
+Die Variablen wurden alle im Methodenkopf angelegt
+*/
 window.onload = function () {
     modal_pause = document.getElementById('modalPause');
     modal_close = document.getElementsByClassName("close")[0];
