@@ -3,6 +3,9 @@
 /* global window */
 "use strict";
 
+/* Funktionen zum zeichnen der Grafiken
+   Autor: Felix Willrich, Frederik Rieß, Vanessa Traub */
+
 
 function drawMatchfield(backgroundContext, backgroundLayer) {
 

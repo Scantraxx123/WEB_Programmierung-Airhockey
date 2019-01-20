@@ -3,6 +3,9 @@
 /* global window */
 "use strict";
 
+/* Spielverhalten
+   Autor: Felix Willrich, Frederik Rieß, Vanessa Traub */
+
 var backgroundContext = null;
 var backgroundLayer = null;
 var gameContext = null;
@@ -19,11 +22,13 @@ var dy = 0;
 var playerGoals = 0;
 var computerGoals = 0;
 
+
 var player = {
     x: 0,
     y: 0,
     r: 30
 };
+
 
 var computer = {
     x: 0,
@@ -60,7 +65,9 @@ var interval = null;
 
 
 
-
+/*
+Funktion wird zum Beginn des Spiels ausgeführt um alle Elemente zu laden und zu platzieren
+*/
 function init() {
 
     backgroundLayer = document.getElementById('background-layer');
@@ -88,7 +95,9 @@ function init() {
 }
 
 
-
+/*
+Update Funktion wird immer wieder aufgerufen um alle Aktionen auszuführen
+*/
 function update() {
     if (playerGoals === 10) {
         popup(true);
