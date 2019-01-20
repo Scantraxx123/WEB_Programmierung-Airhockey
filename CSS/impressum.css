@@ -4,6 +4,16 @@ body {
     background: #444444;
 }
 
+#tableHeadGithub,
+#tableHeadName,
+#tableHeadNumber,
+#tableHeadMail {
+    color: #6183B5;
+}
+
+#head {
+    color: #5D5C5C;
+}
 
 h1 {
     text-align: center;
