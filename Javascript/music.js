@@ -11,7 +11,7 @@ var music = null;
 var musicOffOn = null;
 var boolMusic = true;
 
-var winAudio = new Audio('');
+var winAudio = new Audio('../Music/WinningSound.mp3');
 var looseAudio = new Audio('../Music/Loose_Sound.mp3');
 
 
