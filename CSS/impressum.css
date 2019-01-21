@@ -18,7 +18,7 @@ body {
 h1 {
     text-align: center;
     font-size: 27px;
-    font-family: MS Sans Serif, Helvetica, Arial;
+    font-family: "MS Sans Serif", Helvetica, Arial;
 }
 
 
@@ -70,7 +70,7 @@ h1 {
     color: #FFFFFF;
     text-align: center;
     font-size: 25px;
-    font-family: MS Sans Serif, Helvetica, Arial;
+    font-family: "MS Sans Serif", Helvetica, Arial;
     padding: 20px;
     width: 200px;
     transition: all 0.5s;

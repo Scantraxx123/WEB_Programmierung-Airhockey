@@ -103,7 +103,7 @@ function displayScore() {
         var i = 0,
             highscore = "";
         for (i; i < highScoreEntries.length; i++) {
-            highscore += i + 1 + " " + highScoreEntries[i].name + " " + highScoreEntries[i].time;
+            highscore += i + 1 + ". " + highScoreEntries[i].name + " " + highScoreEntries[i].time;
             if (highScoreEntries.length - 1 !== i) {
                 highscore += "<br>";
             }
