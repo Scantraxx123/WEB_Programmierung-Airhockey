@@ -99,18 +99,38 @@ Einträge werden aufbereitet um diese in einer Tabellenstruktur darzustellen
 */
 function displayScore() {
     getHighscore();
+
+    var table = document.createElement('table'),
+        tr = document.createElement('tr'),
+        place_td = document.createElement('td'),
+        name_td = document.createElement('td'),
+        time_td = document.createElement('td'),
+        place_text = "",
+        name_text = "",
+        time_text = "";
+
     if (highScoreEntries !== null) {
-        var i = 0,
-            highscore = "";
+        var i = 0;
         for (i; i < highScoreEntries.length; i++) {
-            highscore += i + 1 + ". " + highScoreEntries[i].name + " " + highScoreEntries[i].time;
-            if (highScoreEntries.length - 1 !== i) {
-                highscore += "<br>";
-            }
+            tr = document.createElement('tr');
+            place_td = document.createElement('td');
+            name_td = document.createElement('td');
+            time_td = document.createElement('td');
+            place_text = document.createTextNode(i + 1);
+            name_text = document.createTextNode(highScoreEntries[i].name);
+            time_text = document.createTextNode(highScoreEntries[i].time);
+            place_td.appendChild(place_text);
+            name_td.appendChild(name_text);
+            time_td.appendChild(time_text);
+            tr.appendChild(place_td);
+            tr.appendChild(name_td);
+            tr.appendChild(time_td);
+            document.getElementById("Score").appendChild(tr);
 
         }
 
-        document.getElementById("Score").innerHTML = highscore;
+
     }
+
 
 }
