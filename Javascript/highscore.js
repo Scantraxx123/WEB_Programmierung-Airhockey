@@ -87,8 +87,6 @@ function isHighscore(time) {
             if (highScoreEntries[i].time > time) {
                 return true;
             }
-
-
         }
     }
     return false;

@@ -15,6 +15,7 @@ var highscore_text = null;
 var highscore_form = null;
 var input_name = null;
 var submit_Highscore = null;
+var win = false;
 
 
 /*
@@ -22,12 +23,13 @@ Unterscheidung, ob Spieler gewonnen oder verloren hat dementsprechend wird das j
 Der Timer wird gestoppt, sowie der letzte Zeitpunkt gezeichnet und danach wird das Spiel angehalten.
 win = Boolean, der angibt ob Spieler gewonnen
 */
-function popup(win) {
-    if (win) {
+function popup(win2) {
+    if (win2) {
         winPopUp();
     } else {
         modal_loose.style.display = "block";
     }
+    win = true;
     pause = true;
     clearInterval(interval);
     drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens);
@@ -56,11 +58,14 @@ Spieler beendet Pause über ESC, Popup wird geschlossen,
 Timer gestartet und die Update Methode wieder ausgeführt
 */
 function end_pause() {
-    modal_pause.style.display = "none";
-    pause = false;
-    clearInterval(interval);
-    interval = setInterval(timer, 10);
-    update();
+    if (!win) {
+        modal_pause.style.display = "none";
+        pause = false;
+        clearInterval(interval);
+        interval = setInterval(timer, 10);
+        update();
+    }
+
 }
 
 /*
@@ -68,12 +73,14 @@ EventListener für das Pausepopup, Esc um Pause einzuleiten
 */
 document.addEventListener('keyup', function (event) {
     if (event.keyCode === 27) {
-        if (!pause) {
-            modal_pause.style.display = "block";
-            pause = true;
-            clearInterval(interval);
-        } else {
-            end_pause();
+        if (!win) {
+            if (!pause) {
+                modal_pause.style.display = "block";
+                pause = true;
+                clearInterval(interval);
+            } else {
+                end_pause();
+            }
         }
     }
 });

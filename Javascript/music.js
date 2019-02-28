@@ -13,6 +13,7 @@ var boolMusic = true;
 
 var winAudio = new Audio('../Music/WinningSound.mp3');
 var looseAudio = new Audio('../Music/Loose_Sound.mp3');
+var mainAudio = new Audio('../Music/Main_Music.mp3');
 
 
 /*
@@ -40,6 +41,10 @@ function playMusic() {
     music = document.getElementById('myAudio');
     music.volume = 0.4;
     music.play();
+}
+
+function mainMusic() {
+    mainAudio.play();
 }
 
 

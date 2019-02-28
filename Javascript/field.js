@@ -100,7 +100,7 @@ function init() {
 Update Funktion wird immer wieder aufgerufen um alle Aktionen auszuführen
 */
 function update() {
-    if (playerGoals === 1) {
+    if (playerGoals === 10) {
         popup(true);
         endGameMusic(true);
     }
