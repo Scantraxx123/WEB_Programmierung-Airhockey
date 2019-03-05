@@ -40,11 +40,12 @@ Popup wird erweitert, sobald Spieler gewonnen hat
 Zeit wird angezeigt und gleichzeitig wird überprüft, ob der Spieler einen Highscore erspielt hat
 */
 function winPopUp() {
-
+    console.log("Spieler hat die Runde gewonnen");
     time_text.innerHTML = "Glückwunsch! Du hast gewonnen! 😎<br><br>Deine Zeit: " + appendSeconds + ":" + appendTens;
     modal_win.style.display = "block";
 
     if (isHighscore(parseFloat(appendSeconds + "." + appendTens))) {
+        console.log("Spieler hat einen Highscore erreicht");
         highscore_text.innerHTML = "Deine Zeit wird in die Highscoreliste aufgenommen!";
         highscore_form.style.display = "block";
     } else {
@@ -59,6 +60,7 @@ Timer gestartet und die Update Methode wieder ausgeführt
 */
 function end_pause() {
     if (!win) {
+
         modal_pause.style.display = "none";
         pause = false;
         clearInterval(interval);
@@ -77,9 +79,11 @@ document.addEventListener('keyup', function (event) {
             if (!pause) {
                 modal_pause.style.display = "block";
                 pause = true;
+                console.log("Pause gestartet");
                 clearInterval(interval);
             } else {
                 end_pause();
+                console.log("Pause beendet");
             }
         }
     }

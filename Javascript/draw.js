@@ -32,6 +32,7 @@ function drawMatchfield(backgroundContext, backgroundLayer) {
     backgroundContext.beginPath();
     backgroundContext.arc(backgroundLayer.width / 2, backgroundLayer.height / 2, 80, 0, 2 * Math.PI);
     backgroundContext.stroke();
+    console.log("Spielfeld gezeichnet");
 }
 
 function drawPlayer(gameContext, player) {
@@ -40,6 +41,7 @@ function drawPlayer(gameContext, player) {
     gameContext.fillStyle = "#FF0000";
     gameContext.stroke();
     gameContext.fill();
+    //console.log("Spieler gezeichnet");
 }
 
 function drawComputer(gameContext, computer, player) {
@@ -48,6 +50,7 @@ function drawComputer(gameContext, computer, player) {
     gameContext.fillStyle = "#FF0000";
     gameContext.stroke();
     gameContext.fill();
+    //console.log("CPU gezeichnet");
 }
 
 function drawPuk(gameContext, puk) {
@@ -56,6 +59,7 @@ function drawPuk(gameContext, puk) {
     gameContext.arc(puk.x, puk.y, puk.r, 0, 2 * Math.PI);
     gameContext.fillStyle = "#000000";
     gameContext.fill();
+    //console.log("Puk gezeichnet");
 }
 
 function drawScore(score, playerGoals, computerGoals, time, appendSeconds, appendTens) {

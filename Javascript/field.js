@@ -93,6 +93,7 @@ function init() {
     computer.y = 240;
 
     interval = setInterval(timer, 10);
+    console.log("Spiel initalisiert");
 }
 
 
@@ -126,6 +127,7 @@ function update() {
             dy /= 30;
             xspeed = dx * puk.speed;
             yspeed = dy * puk.speed;
+            console.log("Spieler hat den Puk getroffen");
         }
         if (ComputerPukColliding()) {
             puk.speed = 20;
@@ -136,6 +138,7 @@ function update() {
             dy /= 30;
             xspeed = dx * puk.speed;
             yspeed = dy * puk.speed;
+            console.log("Computer hat den Puk getroffen");
 
         }
         moveComputer();
@@ -212,11 +215,13 @@ function checkGoal() {
     if (goalOneCollision()) {
         reset();
         computerGoals++;
+        console.log("Computer hat ein Tor geschossen");
         return true;
     }
     if (goalTwoCollision()) {
         reset();
         playerGoals++;
+        console.log("Spieler hat ein Tor geschossen");
         return true;
     }
 
@@ -254,6 +259,7 @@ Behandelt die Kollisionen des Puks mit dem Spielfeld
 */
 function checkFieldColliding() {
     if (puk.x + puk.r > backgroundLayer.width || puk.x < puk.r) {
+        console.log("Puk hat die Bande berührt");
         if (checkGoal()) {
             return;
         }
@@ -266,7 +272,7 @@ function checkFieldColliding() {
     }
 
     if (puk.y + puk.r > backgroundLayer.height || puk.y < puk.r) {
-
+        console.log("Puk hat die Bande berührt");
         if (checkGoal()) {
             return;
         }
